@@ -14,6 +14,7 @@ from skimage import io
 import albumentations as albu
 import warnings
 warnings.filterwarnings("ignore")
+
 class Compose(object):
     """ Composes several transforms together. 一起组成几个变换
     Args:
@@ -25,6 +26,7 @@ class Compose(object):
         self.selectorNameList = selectorNameList
     def __call__(self, imgs):
         number = 0
+        print("test")
         for t in self.transforms:
             selectorName = str(self.selectorNameList[number])
             start_time = time.time()
@@ -640,7 +642,8 @@ from data_prepare.SegFix_offset_helper import DTOffsetHelper
 from data_prepare.SegFix_offset_helper import Sobel
 from scipy import ndimage
 from scipy.ndimage.morphology import distance_transform_edt, binary_erosion, binary_dilation, binary_fill_holes
-from skimage.morphology import remove_small_objects, watershed
+from skimage.morphology import remove_small_objects
+from skimage.segmentation import watershed
 import postproc_other
 
 from data_prepare.getDirectionDiffMap import generate_dd_map

@@ -26,6 +26,7 @@ import os
 #path = r'D:\EditSoftware\CDNet'
 #os.chdir(path)
 
+
 def create_folder(folder):
     if not os.path.exists(folder):
         os.mkdir(folder)
@@ -142,6 +143,7 @@ def main():
         print('=> Processing image {:s}'.format(img_name))
         img_path = '{:s}/{:s}'.format(img_dir, img_name)
         img = Image.open(img_path)
+        # print(img)
         ori_h = img.size[1]
         ori_w = img.size[0]
         name = os.path.splitext(img_name)[0]
@@ -149,34 +151,34 @@ def main():
             if opt.dataset == 'MultiOrgan':
                 label_path = '{:s}/{:s}_label.png'.format(label_dir, name)  # mask
                 annotation_path = '{:s}/{:s}.xml'.format(annotation_dir, name)
-                if(opt.test['filename'] == 'CoNSeP_test'):
+                if opt.test['filename'] == 'CoNSeP_test':
                     img_type = 'npy'
                 else:
                     img_type = 'mat' # npy
-                if(branch == 5 and img_type == 'npy'):
+                if branch == 5 and img_type == 'npy':
                     label_instance_path = '{:s}_ins/{:s}.npy'.format(label_dir, name)
                     label_img_instance = np.load(label_instance_path)[:,:,0]
                     print('label_img_instance.len = {}'.format(len(np.unique(label_img_instance))))
-                elif(branch == 5 and img_type == 'mat'):
+                elif branch == 5 and img_type == 'mat':
                     label_instance_path = '{:s}_ins/{:s}.mat'.format(label_dir, name)
                     label_img_instance = scio.loadmat(label_instance_path)['inst_map']
                     print('label_img_instance.len = {}'.format(len(np.unique(label_img_instance))))
 
             if opt.dataset == 'MoNuSeg_oridata':
                 label_path = '{:s}/{:s}_label.png'.format(label_dir, name)  # mask
-                annotation_path = '{:s}/{:s}.xml'.format(annotation_dir, name)
-                if (branch == 5):
+                # annotation_path = '{:s}/{:s}.xml'.format(annotation_dir, name)
+                if branch == 5:
                     label_instance_path = '{:s}_ins/{:s}.npy'.format(label_dir, name)
                     label_img_instance = np.load(label_instance_path)
                     print('label_img_instance.len = {}'.format(len(np.unique(label_img_instance))))
             elif opt.dataset == 'CPM2017':
                 label_path = '{:s}/{:s}_label.png'.format(label_dir, name)
                 img_type = 'mat'  # npy mat
-                if (branch == 5 and img_type == 'npy'):
+                if branch == 5 and img_type == 'npy':
                     label_instance_path = '{:s}_ins/{:s}_label.npy'.format(label_dir, name)
                     label_img_instance = np.load(label_instance_path)[:, :, 0]
                     print('label_img_instance.len = {}'.format(len(np.unique(label_img_instance))))
-                elif (branch == 5 and img_type == 'mat'):
+                elif branch == 5 and img_type == 'mat':
                     label_instance_path = '{:s}_ins/{:s}_label.mat'.format(label_dir, name)
                     label_img_instance = scio.loadmat(label_instance_path)['inst_map']
                     print('label_img_instance.len = {}'.format(len(np.unique(label_img_instance))))
@@ -207,11 +209,10 @@ def main():
             notmatch_item.append(label_img_instance.shape)
             scale_size_notmatch.append(notmatch_item)
             continue
-        
-        
-        
+        print(test_transform)
         input = test_transform((img,))[0].unsqueeze(0)
         print('\tComputing output probability maps...')
+
         start_test_time = time.time()
         prob_maps = get_probmaps(input, model, opt, 1)
 

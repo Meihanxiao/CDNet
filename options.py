@@ -72,11 +72,11 @@ class Options:
         
         self.train['num_epochs'] = 300  # number of training epochs
         self.train['input_size'] = 256  # input size of the image
-        self.train['batch_size'] = 8  # batch size
+        self.train['batch_size'] = 4  # batch size
         self.train['val_overlap'] = 40  # overlap size of patches for validation
         
         self.train['seed'] = 2022
-        self.train['early_stop'] = 7
+        self.train['early_stop'] = 0
         self.train['scheduler'] = 'None'
         self.train['step'] = 5
         self.train['lr'] = 0.001  # initial learning rate
@@ -85,7 +85,7 @@ class Options:
         
         
         self.train['log_interval'] = 15  # iterations to print training results
-        self.train['workers'] = 8  # number of workers to load images
+        self.train['workers'] = 0  # number of workers to load images
         self.train['gpu'] = [0]  # select gpu devices
 
         self.train['alpha'] = 0.0  # weight for variance term

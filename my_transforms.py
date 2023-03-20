@@ -25,12 +25,12 @@ class Compose(object):
         self.selectorNameList = selectorNameList
     def __call__(self, imgs):
         number = 0
+        # print("test")
         for t in self.transforms:
             #selectorName = str(self.selectorNameList[number])
             #start_time = time.time()
-            imgs = t(imgs)
 
-            number = number + 1
+            imgs = t(imgs)
         return imgs
 
 
@@ -864,7 +864,7 @@ class ToTensor(object):
         # process image
         for i in range(0, self.index):
             img = imgs[i]
-
+            print(i)
             if (img.mode == 'RGBA'):
                 img = img.convert('RGB')
 
@@ -874,14 +874,15 @@ class ToTensor(object):
                 # backward compatibility
                 pics.append(pic.float().div(255))
 
-
             # handle PIL Image
             if img.mode == 'I':
                 pic = torch.from_numpy(np.array(img, np.int32, copy=False))
             elif img.mode == 'I;16':
                 pic = torch.from_numpy(np.array(img, np.int16, copy=False))
             else:
+                print(1)
                 pic = torch.ByteTensor(torch.ByteStorage.from_buffer(img.tobytes()))
+                print(1)
             # PIL image mode: 1, L, P, I, F, RGB, YCbCr, RGBA, CMYK
             if img.mode == 'YCbCr':  #
                 nchannel = 3
@@ -982,7 +983,7 @@ selector = {
     'vertical_flip': lambda x: RandomVerticalFlip(),
     'random_rotation': lambda x: RandomRotation(x),
     'random_elastic': lambda x: RandomElasticDeform(x[0], x[1]),
-    'random_chooseAug' : lambda x: RandomChooseAug(),
+    'random_chooseAug': lambda x: RandomChooseAug(),
     'random_crop': lambda x: RandomCrop(x),
     'random_affine': lambda x: RandomAffine(x),
     'label_encoding': lambda x: LabelEncoding(x[0], x[1], x[2]),
@@ -994,11 +995,12 @@ selector = {
 def get_transforms(param_dict):
     """ data transforms for train, validation or test """
     start_time = time.time()
-
     t_list = []
     selectorNameList = []
     selectorName_str = ''
     for k, v in param_dict.items():
+        print("k:", k, "v", v)
+        print(selector[k](v))
         t_list.append(selector[k](v))
         selectorNameList.append(k)
         selectorName_str = selectorName_str + '_' + str(k)
@@ -1008,7 +1010,7 @@ def get_transforms(param_dict):
     end_time = time.time()
     work_time = end_time - start_time
     work_time = round(work_time, 2) / 60
-    print('\t\t ======  Compose({:s}),  ====== each epoch work time is [{:.4f} min].'.format(selectorName_str, work_time))
+    print('\t\t ======  Compose({:s}),  =====.= each epoch work time is [{:.4f} min].'.format(selectorName_str, work_time))
     start_time = end_time
     # =======================================================================================================================
 

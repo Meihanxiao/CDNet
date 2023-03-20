@@ -26,7 +26,7 @@ import time
 import os
 
 
-path = r'D:\EditSoftware\DemoTest\PHDPaperDemo\CDNet'
+path = r'D:\Code\PyCharmCode\CDNet'
 os.chdir(path)
 
 
